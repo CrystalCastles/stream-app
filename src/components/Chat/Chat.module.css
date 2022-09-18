@@ -1,0 +1,36 @@
+.chat-area {
+  width: 20em;
+  border: 1px solid black;
+}
+
+.input {
+  margin: .5em;
+  position: absolute;
+  bottom: 0;
+}
+
+.input input {
+  width: 100%;
+}
+
+.input button {
+  margin: .5em;
+  float: right;
+}
+
+.messages {
+  color: rgb(235, 235, 235);
+  margin: .7em 1em;
+}
+
+.messages p {
+  margin: 0;
+}
+
+/* .messages {
+  display: flex !important;
+  flex-direction: column !important;
+  -webkit-box-flex: 1 !important;
+  flex-grow: 1 !important;
+  overflow: hidden !important;
+} */

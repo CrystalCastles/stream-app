@@ -1,0 +1,4 @@
+.stream-page {
+  display: flex;
+  height: calc(100vh - 3.5em)
+}
