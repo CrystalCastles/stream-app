@@ -1,6 +1,5 @@
-import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect, useReducer, Fragment } from "react";
-import { getAuthenticatedUser } from "../../store/auth-actions";
+import { useSelector } from "react-redux";
+import { useState, useEffect, useReducer, useRef, Fragment } from "react";
 import { API, Auth } from "aws-amplify";
 import { createComment as CreateComment } from "../../graphql/mutations";
 import { listComments as ListComments } from "../../graphql/queries";
@@ -32,27 +31,18 @@ function chatReducer(state, action) {
 }
 
 const Chat = () => {
-  const userDispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
+  const inputRef = useRef();
 
-  // const [user, setUser] = useState(null);
   const [state, chatDispatch] = useReducer(chatReducer, initialState);
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState();
-
-  // useEffect(() => {
-  //   userDispatch(getAuthenticatedUser());
-  // }, [userDispatch]);
 
   useEffect(() => {
     fetchComments();
   }, []);
 
   useEffect(() => {
-    // Auth.currentAuthenticatedUser()
-    //   .then((currentUser) => setUser(currentUser))
-    //   .catch((err) => console.log({ err }));
-
     const sub = API.graphql({
       query: OnCreateComment,
     }).subscribe({
@@ -91,15 +81,15 @@ const Chat = () => {
 
   async function createComment() {
     if (!user) {
-      const message = <Link to='/profile'>Please sign up or log in.</Link>;
+      const message = <Link to="/profile">Please sign up or log in.</Link>;
       setError({
-        title: 'No user is logged in.',
-        message: message
-      })
+        title: "No user is logged in.",
+        message: message,
+      });
     } else {
-      if (!inputValue) return;
-      const message = inputValue;
-      setInputValue("");
+      if (!inputRef.current.value) return;
+      const message = inputRef.current.value;
+      inputRef.current.value = "";
       chatDispatch({
         type: "ADD_COMMENT",
         comment: { message, owner: user },
@@ -121,21 +111,29 @@ const Chat = () => {
 
   const errorHandler = () => {
     setError(null);
-  }
+  };
 
   return (
     <Fragment>
-      {error && <ErrorModal title={error.title} message={error.message} onConfirm={errorHandler}/>}
+      {error && (
+        <ErrorModal
+          title={error.title}
+          message={error.message}
+          onConfirm={errorHandler}
+        />
+      )}
       <div className={classes["chat-area"]}>
-        {state.comments.map((comment, index) => (
-          <div className={classes.messages} key={index}>
-            <p>
-              {comment.owner}: {comment.message}
-            </p>
+        <div className={classes["message-area"]}>
+          <div className={classes["message-content"]}>
+            {state.comments.map((comment, index) => (
+              <div className={classes.message} key={index}>
+                {comment.owner}: {comment.message}
+              </div>
+            ))}
           </div>
-        ))}
-        <div className={classes.input}>
-          <input value={inputValue} onChange={onChange} placeholder="comment" />
+        </div>
+        <div className={classes["input-area"]}>
+          <input ref={inputRef} onChange={onChange} placeholder="comment" />
           <button onClick={createComment}>Send</button>
         </div>
       </div>
