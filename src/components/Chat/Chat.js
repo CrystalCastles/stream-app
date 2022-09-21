@@ -7,6 +7,7 @@ import { onCreateComment as OnCreateComment } from "../../graphql/subscriptions"
 
 import classes from "./Chat.module.css";
 import ErrorModal from "../UI/Modal/ErrorModal";
+import Message from "./Message";
 import { Link } from "react-router-dom";
 
 const initialState = {
@@ -35,7 +36,6 @@ const Chat = () => {
   const inputRef = useRef();
 
   const [state, chatDispatch] = useReducer(chatReducer, initialState);
-  const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState();
 
   useEffect(() => {
@@ -104,11 +104,6 @@ const Chat = () => {
     }
   }
 
-  function onChange(e) {
-    e.persist();
-    setInputValue(e.target.value);
-  }
-
   const errorHandler = () => {
     setError(null);
   };
@@ -126,14 +121,12 @@ const Chat = () => {
         <div className={classes["message-area"]}>
           <div className={classes["message-content"]}>
             {state.comments.map((comment, index) => (
-              <div className={classes.message} key={index}>
-                {comment.owner}: {comment.message}
-              </div>
+              <Message key={index} owner={comment.owner} message={comment.message}/>
             ))}
           </div>
         </div>
         <div className={classes["input-area"]}>
-          <input ref={inputRef} onChange={onChange} placeholder="comment" />
+          <input ref={inputRef} placeholder="comment" />
           <button onClick={createComment}>Send</button>
         </div>
       </div>

@@ -8,18 +8,11 @@
 .message-area {
   overflow-y: scroll;
   display: flex;
-  height: auto;
   flex-direction: column-reverse;
-}
-
-.message {
-  color: rgb(235, 235, 235);
-  margin: .7em 1em;
 }
 
 .input-area {
   margin: .5em;
-  bottom: 0;
 }
 
 .input-area input {
