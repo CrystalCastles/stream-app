@@ -9,6 +9,8 @@ import classes from "./Chat.module.css";
 import ErrorModal from "../UI/Modal/ErrorModal";
 import Message from "./Message";
 import { Link } from "react-router-dom";
+import Button from "../UI/Button/Button";
+import Input from "../UI/Input/Input";
 
 const initialState = {
   comments: [],
@@ -36,6 +38,7 @@ const Chat = () => {
   const inputRef = useRef();
 
   const [state, chatDispatch] = useReducer(chatReducer, initialState);
+
   const [error, setError] = useState();
 
   useEffect(() => {
@@ -47,7 +50,6 @@ const Chat = () => {
       query: OnCreateComment,
     }).subscribe({
       next: async (commentData) => {
-        console.log({ commentData });
         const {
           value: { data },
         } = commentData;
@@ -104,9 +106,22 @@ const Chat = () => {
     }
   }
 
+  // async function deleteComment() {
+  //   chatDispatch({
+  //     type: "DELETE_COMMENT",
+  //     comment
+  //   })
+  // }
+
   const errorHandler = () => {
     setError(null);
   };
+
+  const handleEnterSubmit = e => {
+    if(e.key === 'Enter') {
+      createComment();
+    }
+  }
 
   return (
     <Fragment>
@@ -121,13 +136,14 @@ const Chat = () => {
         <div className={classes["message-area"]}>
           <div className={classes["message-content"]}>
             {state.comments.map((comment, index) => (
-              <Message key={index} owner={comment.owner} message={comment.message}/>
+              <Message key={index} owner={comment.owner} message={comment.message} id={comment.id}/>
             ))}
           </div>
         </div>
+
         <div className={classes["input-area"]}>
-          <input ref={inputRef} placeholder="comment" />
-          <button onClick={createComment}>Send</button>
+          <Input ref={inputRef} onKeyPress={handleEnterSubmit} placeholder="Send a message."/>
+          <Button className={classes.button} onClick={createComment}>Send</Button>
         </div>
       </div>
     </Fragment>

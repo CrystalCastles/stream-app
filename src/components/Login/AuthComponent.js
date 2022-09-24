@@ -7,9 +7,10 @@ import awsExports from "../../aws-exports";
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getAuthenticatedUser, signOutAuthenticatedUser } from "../../store/auth-actions";
+import Button from "../UI/Button/Button";
+import classes from './AuthComponent.module.css';
 
 // import { Auth } from "aws-amplify";
-
 
 Amplify.configure(awsExports);
 
@@ -40,15 +41,17 @@ export default function AuthComponent() {
   // }
 
   return (
-    <Authenticator>
-      {({ signOut, user }) => (
-        <main>
-          <h1>Hello {user.username}</h1>
-          <button onClick={signOut}>Sign out</button>
-          {/* <button onClick={deleteUser}>Delete account</button> */}
-        </main>
-      )}
-    </Authenticator>
+    <div className={classes.authenticator}>
+      <Authenticator style={{color: 'red'}}>
+        {({ signOut, user }) => (
+          <main className={classes['profile']}>
+            <h1 className={classes.intro}>Hello {user.username}</h1>
+            <Button className={classes.button} onClick={signOut}>Sign Out</Button>
+            {/* <button onClick={deleteUser}>Delete account and all comments.</button> */}
+          </main>
+        )}
+      </Authenticator>
+    </div>
   );
 }
 

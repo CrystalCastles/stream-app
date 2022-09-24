@@ -24,6 +24,10 @@
   float: right;
 }
 
+.button {
+  margin: 0 !important;
+}
+
 /* .messages {
   display: flex !important;
   flex-direction: column !important;

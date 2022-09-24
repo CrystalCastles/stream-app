@@ -1,4 +1,13 @@
 .message {
+  display: flex;
+}
+
+.message-content {
   color: rgb(235, 235, 235);
   margin: .7em .5em
+}
+
+.delete {
+  fill: rgb(158, 39, 39);
+  cursor: pointer;
 }
