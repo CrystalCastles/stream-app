@@ -2,12 +2,12 @@ import ReactPlayer from "react-player";
 
 import classes from './StreamPlayer.module.css';
 
-const streamUrl = "https://5ab61782dc20.us-east-1.playback.live-video.net/api/video/v1/us-east-1.557458351015.channel.l6pYjS72ScW9.m3u8"
+const streamUrl = "https://7493b8ba4606.us-east-1.playback.live-video.net/api/video/v1/us-east-1.606331160837.channel.wUsr0my93s4U.m3u8";
 
 const StreamPlayer = () => {
   return (
     <div className={classes.player}>
-      <ReactPlayer light={true} url={streamUrl} width="99%" height="99%" playing />
+      <ReactPlayer light={true} url={streamUrl} width="100%" height="100%" playing />
     </div>
   );
 };

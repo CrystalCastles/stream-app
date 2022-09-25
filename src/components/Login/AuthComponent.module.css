@@ -8,6 +8,21 @@
   background-color: rgb(243, 243, 243);
 }
 
+.button:hover {
+  color: white;
+}
+
+.delete-button {
+  color: rgb(243, 243, 243);
+  background-color: rgb(170, 42, 42);
+  margin-left: .2em;
+}
+
 .profile {
-  
+  width: 50%;
+  margin: auto;
+  outline: 2px solid rgb(243, 243, 243);
+  padding: 5em;
+  position: relative;
+  top: 5em;
 }

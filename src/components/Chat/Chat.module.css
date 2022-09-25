@@ -9,23 +9,21 @@
   overflow-y: scroll;
   display: flex;
   flex-direction: column-reverse;
+  height: calc(100% - 109.188px);
 }
 
 .input-area {
-  margin: .5em;
+
 }
 
 .input-area input {
+  margin: .5em;
   width: 100%;
 }
 
 .input-area button {
   margin: .5em;
   float: right;
-}
-
-.button {
-  margin: 0 !important;
 }
 
 /* .messages {

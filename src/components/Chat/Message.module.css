@@ -3,11 +3,18 @@
 }
 
 .message-content {
+  font-size: 1.2rem;
   color: rgb(235, 235, 235);
-  margin: .7em .5em
+  margin: .3em .5em
+}
+
+span {
+  display: flex;
 }
 
 .delete {
   fill: rgb(158, 39, 39);
   cursor: pointer;
+  position: relative;
+  top: .3em;
 }
