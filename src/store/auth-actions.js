@@ -5,7 +5,7 @@ export const getAuthenticatedUser = () => {
   return async (dispatch) => {
     await Auth.currentAuthenticatedUser()
       .then((currentUser) => {
-        dispatch(authActions.setUser({ user: currentUser.username }))
+        dispatch(authActions.setUser({ user: {username: currentUser.username, chatColor: currentUser.attributes['custom:chat_color'] } }))
       }
       )
       .catch((err) => console.log({ err }));

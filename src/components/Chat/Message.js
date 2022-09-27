@@ -22,8 +22,8 @@ const Message = (props) => {
       onMouseOut={handleMouseOut}
     >
       <p className={classes["message-content"]}>
-        {props.owner}: {props.message}{" "}
-        {isHovering && user === props.owner && (
+        <span style={{display: 'inline', color: user.chatColor}}>{props.owner}</span>: {props.message}{" "}
+        {isHovering && user.username === props.owner && (
           <svg
             className={classes.delete}
             onClick={props.onClick}
