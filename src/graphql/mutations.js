@@ -10,6 +10,7 @@ export const createComment = /* GraphQL */ `
       id
       message
       owner
+      color
       createdAt
       updatedAt
     }
@@ -24,6 +25,7 @@ export const updateComment = /* GraphQL */ `
       id
       message
       owner
+      color
       createdAt
       updatedAt
     }
@@ -38,6 +40,7 @@ export const deleteComment = /* GraphQL */ `
       id
       message
       owner
+      color
       createdAt
       updatedAt
     }

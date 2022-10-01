@@ -17,7 +17,7 @@ Amplify.configure(awsExports);
 export default function AuthComponent() {
   const userColor = useSelector((state) => state.auth.user);
   const [modalDisplay, setModalDisplay] = useState(false);
-  const [chatColor, setChatColor] = useState(null);
+  const [messageColor, setMessageColor] = useState(null);
 
   const userDispatch = useDispatch();
 
@@ -58,7 +58,7 @@ export default function AuthComponent() {
   async function updateUserColor() {
     const user = await Auth.currentAuthenticatedUser();
     await Auth.updateUserAttributes(user, {
-      'custom:chat_color': chatColor
+      'custom:chat_color': messageColor
     });
     userDispatch(getAuthenticatedUser());
     setModalDisplay(prevState => !prevState);
@@ -69,7 +69,7 @@ export default function AuthComponent() {
   };
 
   const chatColorHandler = (color) => {
-    setChatColor(color.hex);
+    setMessageColor(color.hex);
   }
 
   return (
@@ -77,7 +77,7 @@ export default function AuthComponent() {
       <Authenticator>
         {({ signOut, user }) => (
           <main className={classes['profile']}>
-            <h1 className={classes.intro}>Hello, {<span style={{display: 'inline', color: userColor.chatColor ? userColor.chatColor : '#ebebeb'}}>{user.username}</span>}.</h1>
+            <h1 className={classes.intro}>Hello, {<span style={{display: 'inline', color: userColor ? userColor.chatColor : '#ebebeb'}}>{user.username}</span>}.</h1>
             <Button onClick={modalHandler}>Change Name Color</Button>
             {modalDisplay && <Modal content={<SliderPicker color={ user.attributes.color ? user.attributes.color : '#95d279'} onChangeComplete={chatColorHandler}/>} onConfirm={modalHandler} onApply={updateUserColor} title="Change display name color"/> }
             <Button className={classes.button} onClick={signOut}>Sign Out</Button>

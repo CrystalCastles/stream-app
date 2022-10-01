@@ -2,11 +2,12 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateComment = /* GraphQL */ `
-  subscription OnCreateComment {
-    onCreateComment {
+  subscription OnCreateComment($owner: String) {
+    onCreateComment(owner: $owner) {
       id
       message
       owner
+      color
       createdAt
       updatedAt
     }
@@ -18,6 +19,7 @@ export const onUpdateComment = /* GraphQL */ `
       id
       message
       owner
+      color
       createdAt
       updatedAt
     }
@@ -29,6 +31,7 @@ export const onDeleteComment = /* GraphQL */ `
       id
       message
       owner
+      color
       createdAt
       updatedAt
     }

@@ -15,4 +15,5 @@ type Comment
   id: ID!
   message: String!
   owner: String
+  color: String
 }

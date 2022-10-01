@@ -120,11 +120,10 @@ const Chat = () => {
         if (!inputRef.current.value) return;
         const message = inputRef.current.value;
         inputRef.current.value = "";
-
         await API.graphql({
           query: CreateComment,
           variables: {
-            input: { message },
+            input: { message, color: user.chatColor },
           },
           authMode: "AMAZON_COGNITO_USER_POOLS",
         });
@@ -176,7 +175,7 @@ const Chat = () => {
         <div className={classes["message-area"]}>
           <div className={classes["message-content"]}>
             {state.comments.map((comment, index) => (
-              <Message key={index} owner={comment.owner} message={comment.message} id={comment.id} onClick={(e) => deleteComment(comment.id, e)}/>
+              <Message key={index} owner={comment.owner} message={comment.message} id={comment.id} color={comment.color} onClick={(e) => deleteComment(comment.id, e)}/>
             ))}
           </div>
         </div>

@@ -7,6 +7,7 @@ export const getComment = /* GraphQL */ `
       id
       message
       owner
+      color
       createdAt
       updatedAt
     }
@@ -23,6 +24,7 @@ export const listComments = /* GraphQL */ `
         id
         message
         owner
+        color
         createdAt
         updatedAt
       }
