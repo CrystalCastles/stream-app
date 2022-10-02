@@ -1,6 +1,7 @@
 import { Amplify, Hub, Auth, API } from "aws-amplify";
 import { Authenticator } from "@aws-amplify/ui-react";
 import { deleteComment as DeleteComment } from "../../graphql/mutations";
+import { listComments as ListComments } from "../../graphql/queries";
 import { SliderPicker } from '@hello-pangea/color-picker';
 
 import awsExports from "../../aws-exports";
@@ -15,8 +16,9 @@ import { useEffect, useState } from "react";
 Amplify.configure(awsExports);
 
 export default function AuthComponent() {
-  const userColor = useSelector((state) => state.auth.user);
-  const [modalDisplay, setModalDisplay] = useState(false);
+  const userFromState = useSelector((state) => state.auth.user);
+  const [colorModalDisplay, setColorModalDisplay] = useState(false);
+  const [deleteModalDisplay, setDeleteModalDisplay] = useState(false);
   const [messageColor, setMessageColor] = useState(null);
 
   const userDispatch = useDispatch();
@@ -25,7 +27,6 @@ export default function AuthComponent() {
     Hub.listen('auth', (data) => {
       const { payload } = data;
       onAuthEvent(payload);           
-      console.log('A new auth event has happened: ', data.payload.data.username + ' has ' + data.payload.event);
     })
   }, [])
 
@@ -38,21 +39,28 @@ export default function AuthComponent() {
   }
 
   const deleteUser = async () => {
-    // let owner = 'depichar';
-    // try {
-    //   // const result = await Auth.deleteUser();
-      
-    //     await API.graphql({
-    //       query: DeleteComment,
-    //       variables: {
-    //         input: { owner },
-    //       },
-    //       authMode: "AMAZON_COGNITO_USER_POOLS",
-    //     });
-    //   // console.log(result);
-    // } catch (error) {
-    //   console.log('Error deleting user', error);
-    // }
+    try {
+      let user = userFromState.username;
+      const commentData = await API.graphql({
+        query: ListComments,
+      });
+      commentData.data.listComments.items.forEach(item => {
+        if(item.owner == user) {
+          let id = item.id;
+          API.graphql({
+            query: DeleteComment,
+            variables: {
+              input: { id },
+            },
+            authMode: "AMAZON_COGNITO_USER_POOLS",
+          });
+        }
+      })
+      const result = await Auth.deleteUser();
+      console.log(result);
+    } catch (error) {
+      console.log('Error deleting user', error);
+    }
   }
 
   async function updateUserColor() {
@@ -61,11 +69,15 @@ export default function AuthComponent() {
       'custom:chat_color': messageColor
     });
     userDispatch(getAuthenticatedUser());
-    setModalDisplay(prevState => !prevState);
+    setColorModalDisplay(prevState => !prevState);
   }
 
-  const modalHandler = () => {
-    setModalDisplay(prevState => !prevState);
+  const colorModalHandler = () => {
+    setColorModalDisplay(prevState => !prevState);
+  };
+
+  const deleteModalHandler = () => {
+    setDeleteModalDisplay(prevState => !prevState);
   };
 
   const chatColorHandler = (color) => {
@@ -77,11 +89,12 @@ export default function AuthComponent() {
       <Authenticator>
         {({ signOut, user }) => (
           <main className={classes['profile']}>
-            <h1 className={classes.intro}>Hello, {<span style={{display: 'inline', color: userColor ? userColor.chatColor : '#ebebeb'}}>{user.username}</span>}.</h1>
-            <Button onClick={modalHandler}>Change Name Color</Button>
-            {modalDisplay && <Modal content={<SliderPicker color={ user.attributes.color ? user.attributes.color : '#95d279'} onChangeComplete={chatColorHandler}/>} onConfirm={modalHandler} onApply={updateUserColor} title="Change display name color"/> }
+            <h1 className={classes.intro}>Hello, {<span style={{display: 'inline', color: userFromState ? userFromState.chatColor : '#ebebeb'}}>{user.username}</span>}.</h1>
+            <Button onClick={colorModalHandler}>Change Name Color</Button>
+            {colorModalDisplay && <Modal content={<SliderPicker color={ user.attributes.color ? user.attributes.color : '#95d279'} onChangeComplete={chatColorHandler}/>} onConfirm={colorModalHandler} onApply={updateUserColor} title="Change display name color"/> }
             <Button className={classes.button} onClick={signOut}>Sign Out</Button>
-            <Button className={classes['delete-button']} onClick={deleteUser}>Delete account and all comments.</Button>
+            <Button className={classes['delete-button']} onClick={deleteModalHandler}>Delete account and all comments.</Button>
+            {deleteModalDisplay && <Modal content={'Are you sure you want to delete your account? This action cannot be undone.'} onConfirm={deleteModalHandler} onApply={deleteUser} title="Delete your account and all chat messages."/>}
           </main>
         )}
       </Authenticator>

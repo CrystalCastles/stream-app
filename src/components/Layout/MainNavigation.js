@@ -10,7 +10,7 @@ const MainNavigation = () => {
 
   return (
     <header className={classes.header}>
-      <div className={classes.logo}>dp</div>
+      <div className={classes.logo}>cg</div>
       <nav className={classes.nav}>
         <ul>
           <li>
